@@ -1,0 +1,24 @@
+{
+  "name": "bragger-backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "repository": "https://github.com/hypeofpipe/bragger-backend.git",
+  "author": "hypeofpipe <hypeofpipe@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/express-graphql": "^0.6.2",
+    "@types/graphql": "^14.2.0",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.2.1",
+    "postgraphile": "^4.3.3"
+  },
+  "devDependencies": {
+    "ts-node": "^8.0.3",
+    "typescript": "^3.4.2"
+  }
+}
