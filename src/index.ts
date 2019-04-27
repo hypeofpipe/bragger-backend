@@ -1,24 +1,44 @@
-import { schema } from './MyGraphQLSchema';
-const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const { postgraphile } = require('postgraphile');
-require('dotenv').config();
+import { GraphQLServer } from 'graphql-yoga'
+import {createConnection, getRepository} from 'typeorm'
+import { User } from './entities/User';
 
-const app = express();
+const typeDefs = `
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+  }
+  type Query {
+    hello(name: String): String!
+    user(id: ID!): User!
+  }
+  type Mutation {
+    addUser(name: String!, email: String!): User
+  }
+`
 
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    graphiql: true,
-  }),
-);
+const resolvers = {
+  Query: {
+    hello: (_, { name }) => `Hello ${name || 'World'}`,
+    user: (_, { id }) => {
+      return getRepository(User).findOne(id)
+    },
+  },
+  Mutation: {
+    addUser: (_, { name, email }) => {
+      const user = new User()
+      user.email = email
+      user.name = name
+      return getRepository(User).save(user)
+    },
+  },
+}
 
-app.use(
-  postgraphile(process.env.DATABASE_URL || 'postgres:///', 'public', {
-    watchPg: true,
-  }),
-);
+const server = new GraphQLServer({ typeDefs, resolvers });
 
-console.log('listening on 3000');
-app.listen(3000);
+createConnection().then(() => {
+  server.start(() => console.log("Server is running on localhost:4000"));
+}).catch((error) => {
+  console.info(`Couldn't connect to the database.`)
+  console.error(error)
+});
