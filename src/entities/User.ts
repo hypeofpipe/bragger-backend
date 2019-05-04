@@ -1,16 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+} from 'typeorm';
+import { Like } from './Like';
 
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  name: string
+  name: string;
 
   @Column()
-  email: string
+  email: string;
 
   @Column()
-  hashPassword: string
+  hashPassword: string;
+
+  @OneToMany(type => Like, like => like.liker)
+  likes: Like[];
 }
