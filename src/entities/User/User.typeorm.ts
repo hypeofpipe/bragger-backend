@@ -5,7 +5,7 @@ import {
   BaseEntity,
   OneToMany,
 } from 'typeorm';
-import { Like } from './Like';
+import { Like } from '../Like/Like.typeorm';
 
 @Entity()
 export class User extends BaseEntity {

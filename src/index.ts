@@ -4,7 +4,7 @@ import { createConnection, getRepository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import 'reflect-metadata';
 import * as jwt from 'jsonwebtoken';
-import { User } from './entities/User';
+import { User } from './entities/User/User.typeorm';
 
 const typeDefs = `
   type User {

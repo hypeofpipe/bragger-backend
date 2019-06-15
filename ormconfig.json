@@ -7,5 +7,5 @@
     "database": "ozjnunpo",
     "synchronize": true,
     "logging": true,
-    "entities": ["src/entities/**/*.ts"]
+    "entities": ["src/entities/**/*.typeorm.ts"]
 }

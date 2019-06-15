@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from 'typeorm'
-import { Like } from './Like';
+import { Like } from '../Like/Like.typeorm';
 
 @Entity()
 export class Post extends BaseEntity {
