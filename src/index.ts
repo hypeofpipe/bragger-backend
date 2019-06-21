@@ -1,24 +1,25 @@
-import { schema } from './MyGraphQLSchema';
-const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const { postgraphile } = require('postgraphile');
-require('dotenv').config();
+import 'reflect-metadata'; // this shim is required
+import { createExpressServer, Action } from 'routing-controllers';
+import { AuthController } from './controllers/AuthController';
 
-const app = express();
+const app = createExpressServer({
+  controllers: [AuthController], // we specify controllers we want to use
+  authorizationChecker: async (action: Action, roles: string[]) => {
+    // here you can use request/response objects from action
+    // also if decorator defines roles it needs to access the action
+    // you can use them to provide granular access check
+    // checker must return either boolean (true or false)
+    // either promise that resolves a boolean value
+    // demo code:
+    const token = action.request.headers['authorization'];
 
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    graphiql: true,
-  }),
-);
+    const user = await getEntityManager().findOneByToken(User, token);
+    if (user) return true;
 
-app.use(
-  postgraphile(process.env.DATABASE_URL || 'postgres:///', 'public', {
-    watchPg: true,
-  }),
-);
+    return false;
+  },
+});
 
-console.log('listening on 3000');
+console.log('Running on 3000');
+// run express application on port 3000
 app.listen(3000);

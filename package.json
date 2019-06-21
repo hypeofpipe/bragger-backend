@@ -9,16 +9,20 @@
   "author": "hypeofpipe <hypeofpipe@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/body-parser": "^1.17.0",
     "@types/dotenv": "^6.1.1",
-    "@types/express": "^4.16.1",
-    "@types/express-graphql": "^0.6.2",
-    "@types/graphql": "^14.2.0",
+    "@types/express": "^4.17.0",
+    "@types/jsonwebtoken": "^8.3.2",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
-    "express-graphql": "^0.7.1",
-    "graphql": "^14.2.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.9.0",
-    "postgraphile": "^4.3.3"
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.7.7",
+    "typeorm": "^0.2.18"
   },
   "devDependencies": {
     "ts-node": "^8.0.3",
