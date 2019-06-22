@@ -1,8 +1,9 @@
 import {
-  Controller,
   Post,
   BodyParam,
   BadRequestError,
+  Body,
+  JsonController,
 } from 'routing-controllers';
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
@@ -14,20 +15,24 @@ interface Result {
   message: string;
   token: string | undefined;
 }
-@Controller()
+@JsonController('/auth')
 export class AuthController {
   @Post('/register')
   async register(
     @BodyParam('nickname') nickname: string,
     @BodyParam('password') password: string,
+    @Body() test: any,
   ): Promise<Result> {
+    if (!nickname || !password) {
+      throw new BadRequestError('Please provide nickname and password');
+    }
     const existUser: User | undefined = await getRepository(User).findOne({
       nickname,
     });
     if (existUser) throw new BadRequestError('User already exists!');
     const hashedPassword: string = await bcrypt.hash(password, 8);
     const user: User = await getRepository(User).save(
-      new User({ nickname, password: hashedPassword }),
+      new User(nickname, password),
     );
     const token: string | undefined = !!user
       ? jwt.sign({ userId: user.id }, 'mommy')
@@ -45,6 +50,9 @@ export class AuthController {
     @BodyParam('nickname') nickname: string,
     @BodyParam('password') password: string,
   ): Promise<Result> {
+    if (!nickname || !password) {
+      throw new BadRequestError('Please provide nickname and password');
+    }
     const user: User | undefined = await getRepository(User).findOne({
       nickname,
     });

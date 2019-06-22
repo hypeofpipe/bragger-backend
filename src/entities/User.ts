@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @Column()
   nickname: string;
@@ -11,9 +11,8 @@ export class User {
   @Column()
   password: string;
 
-  constructor(params: { id?: number; nickname: string; password: string }) {
-    this.id = params.id;
-    this.nickname = params.nickname;
-    this.password = params.password;
+  constructor(nickname: string, password: string) {
+    this.nickname = nickname;
+    this.password = password;
   }
 }

@@ -1,19 +1,41 @@
 import 'reflect-metadata';
 import { createExpressServer, Action } from 'routing-controllers';
+import { createConnection } from 'typeorm';
+import { User } from './entities/User';
+import { Twit } from './entities/Twit';
 import { AuthController } from './controllers/AuthController';
 import { findOneByToken } from './auth/Helper';
+import { TwitController } from './controllers/TwitController';
+require('dotenv').config();
 
-const app = createExpressServer({
-  controllers: [AuthController],
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    const token = action.request.headers['authorization'];
+if (!process.env.DB_URL) {
+  throw new Error('Please, specify correct DB url.');
+}
 
-    const user = await findOneByToken(token);
-    if (user) return true;
+createConnection({
+  type: 'postgres',
+  url: process.env.DB_URL,
+  entities: [Twit, User],
+  synchronize: true,
+})
+  .then(async connection => {
+    const app = createExpressServer({
+      controllers: [AuthController, TwitController],
+      authorizationChecker: async (action: Action, roles: string[]) => {
+        const token = action.request.headers['authorization'];
 
-    return false;
-  },
-});
+        const user = await findOneByToken(token);
+        if (user) return true;
 
-console.log('Running on 3000');
-app.listen(3000);
+        return false;
+      },
+      currentUserChecker: async (action: Action) => {
+        const token = action.request.headers['authorization'];
+        return await findOneByToken(token);
+      },
+    });
+
+    console.log('Running on 3000');
+    app.listen(3000);
+  })
+  .catch(err => console.error(err));
