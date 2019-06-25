@@ -29,7 +29,13 @@ export class AuthController {
     const existUser: User | undefined = await getRepository(User).findOne({
       nickname,
     });
-    if (existUser) throw new BadRequestError('User already exists!');
+    if (existUser) {
+      return {
+        success: !!existUser,
+        message: 'User has been successfully logged in!',
+        token: jwt.sign({ userId: existUser.id }, 'mommy')
+      };
+    }
     const hashedPassword: string = await bcrypt.hash(password, 8);
     const user: User = await getRepository(User).save(
       new User(nickname, password),

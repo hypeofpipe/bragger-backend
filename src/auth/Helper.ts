@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm';
 export const findOneByToken = async (
   token: string,
 ): Promise<User | undefined> => {
-  const payload = JWT.verify(token, 'mommy');
+  const payload = JWT.verify(token.split("Bearer ")[1], 'mommy');
   if (typeof payload === 'string') {
     console.log('Bad payload', payload);
     return;

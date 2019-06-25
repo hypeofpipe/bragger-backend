@@ -33,9 +33,10 @@ createConnection({
         const token = action.request.headers['authorization'];
         return await findOneByToken(token);
       },
+      cors: true,
     });
 
-    console.log('Running on 3000');
-    app.listen(3000);
+    console.log('Running on 4000');
+    app.listen(4000);
   })
   .catch(err => console.error(err));
