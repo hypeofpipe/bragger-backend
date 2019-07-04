@@ -5,6 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# TypeORM config
+
+ormconfig.json
+
 # Runtime data
 pids
 *.pid
